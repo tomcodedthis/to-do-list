@@ -1,0 +1,103 @@
+:root {
+    --black: #202020;
+    --white: #ffffff;
+    --red: red;
+    --yellow: yellow;
+    --green: green;
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 90vh;
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    background-color: var(--black);
+    color: var(--black);
+}
+
+main {
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+    gap: 30px;
+    margin: 20px;
+    padding: 20px 40px;
+    width: 60vw;
+    background-color:bisque;
+}
+
+.line {
+    height: 3px;
+    width: 100%;
+    background-color: var(--black);
+}
+
+button {
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    border-style: none;
+    border: 3px solid var(--black);
+    background-color: var(--white);
+    font-size: 24px;
+    padding: 10px;
+    border-radius: 10px;
+    width: 40%;
+}
+
+#reset {
+    margin-left: 30%;
+}
+
+div button {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}
+
+#title {
+    text-align: left;
+    font-style: italic;
+    margin: 20px 0 0 0;
+}
+
+#tasks-cont {
+    display: flex;
+    flex-flow: column;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.task {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.text-input {
+    display: flex;
+    flex-grow: 1;
+    appearance: none;
+    outline: none;
+    text-align: center;
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 1.8rem;
+    padding: 10px;
+    width: 90%;
+    border: 3px solid var(--black);
+    border-radius: 10px;
+}
+
+main div {
+    display: flex;
+}
+
+.btn-cont {
+    gap: 10px;
+    padding-left: 10px;
+}
