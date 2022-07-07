@@ -3,10 +3,29 @@ const addBtn = document.querySelector('#add-task');
 const resetBtn = document.querySelector('#reset');
 const taskList = document.querySelector('#tasks-cont');
 const taskInput = document.querySelector('.text-input');
+const date = document.querySelector('input[type=date]');
 
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let focused = false;
 let update = false;
+let currentDate = JSON.parse(localStorage.getItem('date')) || [];
+
+if (currentDate == '') {        // Sets default date
+
+    const thisDate = new Date();
+    const today = thisDate.getFullYear().toString() + '-' + (thisDate.getMonth() + 1).toString().padStart(2, 0) +
+    '-' + thisDate.getDate().toString().padStart(2, 0);
+
+    date.value = today;
+
+    currentDate.push(today);
+    localStorage.setItem('date', JSON.stringify(today));
+
+} else {
+    
+    date.value = currentDate;
+
+}
 
 function changeColor(e) {
 
@@ -58,7 +77,7 @@ function addTask(e) {
         localStorage.setItem('tasks', JSON.stringify(tasks));
 
     } else if (e.name == 'task') {
-        
+
         setTimeout(() => {
 
             const parent = e.parentElement;
@@ -210,5 +229,14 @@ addBtn.addEventListener('click', addTask);
 resetBtn.addEventListener('click', reset);
 document.addEventListener('click', runBtns);
 document.onkeydown = keyPress;
+date.addEventListener('change', function() {
+
+    now = date.value;
+
+    currentDate = [];
+    currentDate.push(now);
+    localStorage.setItem('date', JSON.stringify(now));
+
+})
 
 populateList(tasks, taskList);
