@@ -22,11 +22,16 @@ main {
     display: flex;
     flex-flow: column;
     align-items: stretch;
-    gap: 30px;
+    justify-content: space-around;
+    gap: 20px;
     margin: 20px;
     padding: 20px 40px;
-    width: 60vw;
+    width: 70vw;
     background-color:bisque;
+}
+
+main div {
+    display: flex;
 }
 
 .line {
@@ -40,33 +45,56 @@ button {
     border-style: none;
     border: 3px solid var(--black);
     background-color: var(--white);
-    font-size: 24px;
-    padding: 10px;
+    font-size: 1.5rem;
+    padding: 5px;
     border-radius: 10px;
-    width: 40%;
 }
 
-#reset {
-    margin-left: 30%;
-}
-
-div button {
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
+.heading {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 25px 0;
 }
 
 #title {
-    text-align: left;
+    text-align: center;
     font-style: italic;
-    margin: 20px 0 0 0;
+    margin: 0 0 0 20px;
+}
+
+.heading input {
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 1.5rem;
+    outline: none;
+    appearance: none;
+    border: 3px solid var(--black);
+    border-radius: 10px;
+    padding: 10px;
+    width: 180px;
+}
+
+#reset {
+    opacity: 0.8;
+    width: 200px;
+    height: 50px;
+}
+
+#reset:hover {
+    opacity: 1;
+}
+
+#tasks-cont button {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
 }
 
 #tasks-cont {
     display: flex;
     flex-flow: column;
     gap: 20px;
-    align-items: stretch;
 }
 
 .task {
@@ -86,18 +114,26 @@ div button {
     outline: none;
     text-align: center;
     font-family: Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     padding: 10px;
-    width: 90%;
+    width: 80%;
     border: 3px solid var(--black);
     border-radius: 10px;
-}
-
-main div {
-    display: flex;
 }
 
 .btn-cont {
     gap: 10px;
     padding-left: 10px;
+}
+
+#tasks-cont .controls {
+    scale: 0.8;
+}
+
+.controls {
+    transition: 300ms;
+}
+
+.controls:hover {
+    transform: scale(1.15);
 }
