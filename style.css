@@ -72,9 +72,8 @@ button:hover, input:hover, input:focus {
 }
 
 .heading input {
-    width: 180px;
+    width: 185px;
     justify-self: right;
-    margin-right: 10px;
 }
 
 #tasks-cont {
@@ -101,7 +100,12 @@ button:hover, input:hover, input:focus {
 
 .btn-cont {
     gap: 10px;
-    padding-left: 10px;
+    margin-left: 10px;
+}
+
+.controls-cont {
+    gap: 18px;
+    margin-left: -10px;
 }
 
 .controls, .progress {
@@ -112,19 +116,47 @@ button:hover, input:hover, input:focus {
     transform: scale(1.08);
 }
 
+.move-cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.move-cont img {
+    width: 24px;
+    height: 12px;
+}
+
 .line {
     height: 3px;
     width: 100%;
-    margin-top: 25px;
+    margin: 10px 0;
     background-color: var(--black);
 }
 
+#task-input {
+    gap: 30px
+}
+
 #reset {
-    width: 160px;
+    width: 150px;
     height: 50px;
-    margin: 0 10px 0 16px;
 }
 
 h1 {
     font-size: 40px;
+}
+
+@media only screen and (min-width: 1500px) {
+    main {
+        width: 1050px;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    main {
+        width: 525px;
+    }
 }
