@@ -1,14 +1,15 @@
-const progressBtns = document.querySelectorAll('.progress');
+const progressBtns = document.querySelectorAll('.progress');        // Global Variables
 const addBtn = document.querySelector('#add-task');
 const resetBtn = document.querySelector('#reset');
 const taskList = document.querySelector('#tasks-cont');
 const taskInput = document.querySelector('.text-input');
 const date = document.querySelector('input[type=date]');
+const dragBtns = document.querySelectorAll('.drag');
 
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+let currentDate = JSON.parse(localStorage.getItem('date')) || [];
 let focused = false;
 let update = false;
-let currentDate = JSON.parse(localStorage.getItem('date')) || [];
 
 if (currentDate == '') {        // Sets default date
 
@@ -27,31 +28,36 @@ if (currentDate == '') {        // Sets default date
 
 }
 
-function changeColor(e) {
+function changeColor(e) {       // Changes progress buttons color
+
+    const parent = e.parentElement;
+    const none = (parent.querySelector('[id=none]'));
+    const started = (parent.querySelector('[id=started]'));
+    const done = (parent.querySelector('[id=done]'));
 
     if (e.id == 'none') {
 
-        e.nextElementSibling.style.backgroundColor = 'var(--white)';
-        e.nextElementSibling.nextElementSibling.style.backgroundColor = 'var(--white)';
-        e.style.backgroundColor = 'var(--red)';
+        none.style.backgroundColor = 'var(--red)';
+        started.style.backgroundColor = 'var(--white)';
+        done.style.backgroundColor = 'var(--white)';
 
     } else if (e.id == 'started') {
 
-        e.previousElementSibling.style.backgroundColor = 'var(--white)';
-        e.nextElementSibling.style.backgroundColor = 'var(--white)';
-        e.style.backgroundColor = 'var(--yellow)';
+        none.style.backgroundColor = 'var(--white)';
+        started.style.backgroundColor = 'var(--yellow)';
+        done.style.backgroundColor = 'var(--white)';
 
     } else if (e.id == 'done'){
 
-        e.previousElementSibling.style.backgroundColor = 'var(--white)';
-        e.previousElementSibling.previousElementSibling.style.backgroundColor = 'var(--white)';
-        e.style.backgroundColor = 'var(--green)';
+        none.style.backgroundColor = 'var(--white)';
+        started.style.backgroundColor = 'var(--white)';
+        done.style.backgroundColor = 'var(--green)';
 
     }
 
 }
 
-function deleteTask(e) {
+function deleteTask(e) {        // Deletes individual tasks
 
     taskList.removeChild(e.parentElement.parentElement)
     tasks.shift(e.parentElement.parentElement)
@@ -59,12 +65,12 @@ function deleteTask(e) {
 
 }
 
-function addTask(e) {
+function addTask(e) {        // Adds/Updates individual tasks to local storage
 
-    if (e.className == 'progress') {
+    if (e.className == 'progress') {        // Updates progress
 
         const parent = e.parentElement.parentElement;
-        const task = (parent.querySelector('[name=task]')).value;
+        const task = (parent.querySelector('[name=added-task]')).value;
         const index = tasks.findIndex(name => name.task === task);
 
         const prog = e.id;
@@ -76,12 +82,12 @@ function addTask(e) {
         tasks.splice(index, 1, item);
         localStorage.setItem('tasks', JSON.stringify(tasks));
 
-    } else if (e.name == 'task') {
+    } else if (e.name == 'added-task') {      // Updates task
 
         setTimeout(() => {
 
             const parent = e.parentElement;
-            const task = (parent.querySelector('[name=task]')).value;
+            const task = (parent.querySelector('[name=added-task]')).value;
             const index = tasks.findIndex(name => name.task === task);
             const progBtns = (parent.querySelectorAll('.progress'));
     
@@ -103,7 +109,7 @@ function addTask(e) {
 
         }, 100);
 
-    } else {
+    } else {        // Adds new task
 
         e.preventDefault();
 
@@ -123,13 +129,13 @@ function addTask(e) {
     }
 }
 
-function populateList(tasks = [], taskList) {
+function populateList(tasks = [], taskList) {       // Adds/Updates tasks to visual task list, depending on progress
 
     taskList.innerHTML = tasks.map((task, i) => {
       if (task.progress == 'none') {
         return `
         <div class="task" id="${i}">
-            <input type="text" class="text-input" name="task" value="${task.task}">
+            <input type="text" class="text-input" name="added-task" value="${task.task}">
             <div class="btn-cont">
                 <button id="none" class="progress" style="background-color: var(--red)"></button>
                 <button id="started" class="progress" style="background-color: var(--white)"></button>
@@ -137,14 +143,17 @@ function populateList(tasks = [], taskList) {
             </div>
             <div class="controls-cont">
                 <img src="./images/x.svg" alt="delete" class="controls" id="delete">
-                <img src="./images/drag.svg" alt="drag" class="controls" id="drag">
+                <div class="move-cont">
+                    <img src="./images/arrow-up.png" alt="arrow-up" class="controls" id="arrow-up">
+                    <img src="./images/arrow-down.png" alt="arrow-down" class="controls" id="arrow-down">
+                </div>
             </div>
         </div>
       `;
       } else if (task.progress == 'started') {
         return `
         <div class="task" id="${i}">
-            <input type="text" class="text-input" name="task" value="${task.task}">
+            <input type="text" class="text-input" name="added-task" value="${task.task}">
             <div class="btn-cont">
                 <button id="none" class="progress" style="background-color: var(--white)"></button>
                 <button id="started" class="progress" style="background-color: var(--yellow)"></button>
@@ -152,14 +161,17 @@ function populateList(tasks = [], taskList) {
             </div>
             <div class="controls-cont">
                 <img src="./images/x.svg" alt="delete" class="controls" id="delete">
-                <img src="./images/drag.svg" alt="drag" class="controls" id="drag">
+                <div class="move-cont">
+                    <img src="./images/arrow-up.png" alt="arrow-up" class="controls" id="arrow-up">
+                    <img src="./images/arrow-down.png" alt="arrow-down" class="controls" id="arrow-down">
+                </div>
             </div>
         </div>
       `;
       } else if (task.progress == 'done') {
         return `
         <div class="task" id="${i}">
-            <input type="text" class="text-input" name="task" value="${task.task}">
+            <input type="text" class="text-input" name="added-task" value="${task.task}">
             <div class="btn-cont">
                 <button id="none" class="progress" style="background-color: var(--white)"></button>
                 <button id="started" class="progress" style="background-color: var(--white)"></button>
@@ -167,7 +179,10 @@ function populateList(tasks = [], taskList) {
             </div>
             <div class="controls-cont">
                 <img src="./images/x.svg" alt="delete" class="controls" id="delete">
-                <img src="./images/drag.svg" alt="drag" class="controls" id="drag">
+                <div class="move-cont">
+                    <img src="./images/arrow-up.png" alt="arrow-up" class="controls" id="arrow-up">
+                    <img src="./images/arrow-down.png" alt="arrow-down" class="controls" id="arrow-down">
+                </div>
             </div>
         </div>
       `;
@@ -176,7 +191,7 @@ function populateList(tasks = [], taskList) {
 
 }
 
-function reset() {
+function reset() {      // Clears all local storage and visual list
 
     localStorage.clear();
     tasks = [];
@@ -186,7 +201,7 @@ function reset() {
       })
 }
 
-function runBtns(e) {
+function runBtns(e) {       // Runs individual taks buttons
 
     if (e.target.className == 'progress') {
 
@@ -197,7 +212,19 @@ function runBtns(e) {
 
         deleteTask(e.target)
 
-    } else if (e.target.name == 'task') {
+    } else if (e.target.className == 'controls') {
+
+        if (e.target.id == 'arrow-up' || e.target.id == 'arrow-down') {
+
+            moveTask(e.target);
+
+        } else {
+
+            return
+
+        }
+
+    } else if (e.target.name == 'added-task') {
 
         update = true;
 
@@ -208,7 +235,7 @@ function runBtns(e) {
     }
 }
 
-function keyPress(e) {
+function keyPress(e) {      // Keyboard shortcuts
 
     if (e.key == 'Enter' && focused == true) {
 
@@ -222,13 +249,52 @@ function keyPress(e) {
 
 }
 
-taskInput.onfocus = () => {focused = true};
-taskInput.onblur = () => {focused = false};
+function moveTask(e) {      // Moves tasks up/down & stores to storage
+    console.log('yo')
+    const parent = document.querySelector('#tasks-cont');
+    const div = e.parentElement.parentElement.parentElement;
+    const prevDiv = div.previousElementSibling;
+    const nextDiv = div.nextElementSibling;
+    const divIndex = tasks.findIndex(function(task) {
+
+        return task.task == div.firstElementChild.value
+
+    });
+
+    if (e.id == 'arrow-up') {
+        
+        if (divIndex == 0) {      // Handles errors
+            
+            return
+        
+        } else {
+
+            parent.insertBefore(div, prevDiv);
+            [tasks[divIndex - 1], tasks[divIndex]] = [tasks[divIndex], tasks[divIndex - 1]];
+
+        } 
+        
+    } else if (e.id == 'arrow-down') {
+
+        if ((divIndex + 1) == tasks.length) {      // Handles errors
+
+            return
+
+        } else {
+
+            parent.insertBefore(nextDiv, div);
+            [tasks[divIndex], tasks[divIndex + 1]] = [tasks[divIndex + 1], tasks[divIndex]];
+
+        }
+    }
+
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+
+}
+
 progressBtns.forEach(btn => btn.addEventListener('click', changeColor));
 addBtn.addEventListener('click', addTask);
 resetBtn.addEventListener('click', reset);
-document.addEventListener('click', runBtns);
-document.onkeydown = keyPress;
 date.addEventListener('change', function() {
 
     now = date.value;
@@ -237,6 +303,11 @@ date.addEventListener('change', function() {
     currentDate.push(now);
     localStorage.setItem('date', JSON.stringify(now));
 
-})
+});
+taskInput.onfocus = () => {focused = true};
+taskInput.onblur = () => {focused = false};
 
-populateList(tasks, taskList);
+document.addEventListener('click', runBtns);
+document.onkeydown = keyPress;
+
+populateList(tasks, taskList);      // Adds saved data on screen load
